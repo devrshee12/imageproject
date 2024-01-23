@@ -57,7 +57,7 @@ export const getImages = (search="dog", page=1, per_page=18) => {
                 newSearch = "dog"
             }
             console.log("newSearch : ", newSearch);
-            const res = await axios.get(`https://api.pexels.com/v1/search?query=${newSearch}&page=${page}&per_page=${per_page}&orientation=square`, {
+            const res = await axios.get(`${process.env.REACT_APP_PEXEL_API}/search?query=${newSearch}&page=${page}&per_page=${per_page}&orientation=square`, {
                 headers: {
                     Authorization: `${process.env.REACT_APP_PEXEL_API_KEY}`
                 }
@@ -80,7 +80,7 @@ export const apiSpecificImage = (id) => {
     return async(dispatch) => {
         try{
             dispatch(getSpecificImageRequest());
-            const res = await axios.get(`https://api.pexels.com/v1/photos/${id}`, {
+            const res = await axios.get(`${process.env.REACT_APP_PEXEL_API}/photos/${id}`, {
                 headers: {
                     Authorization: `${process.env.REACT_APP_PEXEL_API_KEY}`
                 }
