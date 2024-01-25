@@ -1,4 +1,4 @@
-import { GET_IMAGE_FAILURE, GET_IMAGE_REQUEST, GET_IMAGE_SUCCESS, GET_SPECIFIC_IMAGE_FAILURE, GET_SPECIFIC_IMAGE_REQUEST, GET_SPECIFIC_IMAGE_SUCCESS } from "./imageTypes"
+import { GET_IMAGE_FAILURE, GET_IMAGE_REQUEST, GET_IMAGE_SUCCESS, GET_SPECIFIC_IMAGE_FAILURE, GET_SPECIFIC_IMAGE_REQUEST, GET_SPECIFIC_IMAGE_SUCCESS, SET_SEARCH } from "./imageTypes"
 
 
 const initalState = {
@@ -16,7 +16,12 @@ const initalState = {
     // specific image
     gettingSpecificImage: false,
     specificImage: {},
-    getSpecificImageFailure: null
+    getSpecificImageFailure: null,
+
+
+    // search
+
+    search:""
 
 
 }
@@ -36,11 +41,11 @@ const imageReducer = (state = initalState, action) => {
                 ...state, 
                 gettingImages: false,
                 getImageFailure: null,
-                images: action.payload.photos,
-                page: action.payload.page,
-                per_page: action.payload.per_page,
-                total_results: action.payload.total_results,
-                total_pages: action.payload.total_results/action.payload.per_page
+                images: action?.payload?.photos,
+                page: action?.payload?.page,
+                per_page: action?.payload?.per_page,
+                total_results: action?.payload?.total_results,
+                total_pages: action?.payload?.total_results/action?.payload?.per_page
 
 
             }
@@ -49,7 +54,7 @@ const imageReducer = (state = initalState, action) => {
             return {
                 ...state,
                 gettingImages: false,
-                getImageFailure: action.payload.photos,
+                getImageFailure: action?.payload,
             }
 
         case GET_SPECIFIC_IMAGE_REQUEST:
@@ -63,13 +68,18 @@ const imageReducer = (state = initalState, action) => {
             return {
                 ...state, 
                 gettingSpecificImage: false,
-                specificImage: action.payload
+                specificImage: action?.payload
             }
         case GET_SPECIFIC_IMAGE_FAILURE:
             return {
                 ...state, 
                 gettingSpecificImage:false,
-                getSpecificImageFailure: action.payload
+                getSpecificImageFailure: action?.payload
+            }
+        case SET_SEARCH:
+            return {
+                ...state,
+                search: action.payload
             }
         default:
             return state

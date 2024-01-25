@@ -1,8 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { apiSpecificImage } from '../features/image/imageActions'
 import { saveAs } from 'file-saver'
+import { AsyncImage } from 'loadable-image'
+import { Blur } from 'transitions-kit'
+import { Dropdown, DropdownButton } from 'react-bootstrap'
+
+
 
 
 const ImageDesc = () => {
@@ -10,6 +15,7 @@ const ImageDesc = () => {
     const {gettingSpecificImage, specificImage, getSpecificImageFailure} = useSelector((state) => state.image)
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [size, setSize] = useState("small")
     useEffect(() => {
         dispatch(apiSpecificImage(imageId))
     }, [])
@@ -21,17 +27,27 @@ const ImageDesc = () => {
         }
         else{
             const realHistory = JSON.parse(gotHistory);
-            if(realHistory.some((i) => i.id === image.id) === false){
+            if(realHistory.some((i) => i.url === image?.src?.original) === false){
                 localStorage.setItem("history", JSON.stringify([...realHistory, {url:image?.src?.original, alt: image?.alt, downloadDate: Date.now()}]))
 
             }
         }
-        saveAs(image?.src?.original, "downloadedimage.jpg")
+        saveAs(image?.src[size], "downloadedimage.jpg")
     }
+
+    if(getSpecificImageFailure){
+        return(
+            <div className="alert alert-dismissible alert-danger">
+                <button type="button" className="btn-close" data-bs-dismiss="alert"></button>
+                <strong>Oh snap!</strong> <a href="#" className="alert-link"></a> {getSpecificImageFailure}
+            </div>
+        )
+    }
+
   return (
     <>
 
-    {
+    {/* {
         specificImage?.id !== imageId ? 
         <div className='container'>
             <img src={specificImage?.src?.original} width={500} height={500}/>
@@ -42,8 +58,24 @@ const ImageDesc = () => {
             </div>
 
         </div> : <div style={{height:"100vh", width: "100vw"}}>Loading...</div>
-    }
+    } */}
         
+
+        <div class="card mb-3" style={{width:"100vw", height:"95vh", display:"flex", justifyContent:"center", alignItems:"center"}}>
+            {/* <img src="..." class="card-img-top" alt="..."> */}
+            <AsyncImage src={specificImage?.src?.original} alt={specificImage?.photographer} style={{height:"500px", width:"500px"}} className="card-img-top" Transition={Blur} error={<div style={{ background: '#222' }} />} loader={<div style={{ background: '#888' }} />}/>
+            <div class="card-body">
+                <h5 class="card-title">{specificImage?.photographer}</h5>
+                <p class="card-text">{specificImage?.photographer}</p>
+                <p class="card-text" style={{display:"flex", justifyContent:"space-between", width:"500px"}}>
+                <DropdownButton title={size}>
+                    <Dropdown.Item onClick={()=>{setSize("small")}}>Small</Dropdown.Item>
+                    <Dropdown.Item onClick={() => {setSize("medium")}}>Medium</Dropdown.Item>
+                    <Dropdown.Item onClick={() => {setSize("large")}}>Large</Dropdown.Item>
+                </DropdownButton>
+                <button type="button" class="btn btn-outline-info" onClick={() => {handleDownload(specificImage)}}>Download</button></p>
+            </div>
+        </div>
     
     </>
 

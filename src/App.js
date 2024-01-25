@@ -6,62 +6,61 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getImages } from './features/image/imageActions';
 import SpecificImage from './components/SpecificImage';
 import { useNavigate } from 'react-router-dom';
+import NavBar from './components/NavBar';
 
 function App() {
   const dispatch = useDispatch();
-  const [search, setSearch] = useState("dog");
-  const {gettingImages, images, getImageFailure, total_pages} = useSelector((state) => state.image);
+
+  const {gettingImages, images, getImageFailure, total_pages, search} = useSelector((state) => state.image);
   const navigate = useNavigate()
-  const handleHistory = () => {
-    navigate("/history")
-  } 
+  
   useEffect(() => {
     dispatch(getImages());
 
   }, [])
 
   useEffect(() => {
-    
-    const timer = setTimeout(() => {
+    if(search !== ""){
       dispatch(getImages(search))
-    }, 500)
-
-    return () => clearTimeout(timer)
+    }
   }, [search])
+
+  if(getImageFailure){
+    return(
+      <div class="alert alert-dismissible alert-danger">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>Oh snap!</strong> <a href="#" class="alert-link"></a> {getImageFailure}
+      </div>
+    )
+  }
+
+  
 
  
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="#">Imagia</a>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarColor01">
-            <form className="d-flex">
-              <input className="form-control me-sm-2" type="search" placeholder="Search" style={{color:"black"}} value={search} onChange={(e) => {setSearch(e.target.value)}}/>
-              {/* <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button> */}
-            </form>
-          </div>
-        </div>
-        <button type="button" class="btn btn-outline-info" onClick={handleHistory}>Downloads</button>
-      </nav>
-
+      <NavBar/>
       {
-        images?.length === 0 && <div> NO DATA</div>
+        images?.length === 0 && <div style={{width:"100vw", display:"flex", justifyContent:"center", alignItems:"center", marginTop:"10px", fontSize:"50px"}}>No Data</div>
       }
 
-      <div className='container-fluid'>
+      {
+        gettingImages ? <div style={{width:"100vw", display:"flex", justifyContent:"center", alignItems:"center", marginTop:"10px"}}><div class="spinner-border text-info" role="status" >
+        <span class="sr-only"></span>
+      </div>
+      </div>
+        :
+        <div class="row row-cols-1 row-cols-md-3" style={{marginLeft:"70px"}}>
         {
-          images ? images.map((image) => {
+          images.map((image) => {
             return (
               <SpecificImage image={image}/>
             )
-          }) : <div>Loading...</div>
+          })
         }
     </div>
+        }
 
     
     </>

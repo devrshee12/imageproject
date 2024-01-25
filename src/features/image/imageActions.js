@@ -1,5 +1,5 @@
 import axios from "axios"
-import { GET_IMAGE_FAILURE, GET_IMAGE_REQUEST, GET_IMAGE_SUCCESS, GET_SPECIFIC_IMAGE_FAILURE, GET_SPECIFIC_IMAGE_REQUEST, GET_SPECIFIC_IMAGE_SUCCESS } from "./imageTypes"
+import { GET_IMAGE_FAILURE, GET_IMAGE_REQUEST, GET_IMAGE_SUCCESS, GET_SPECIFIC_IMAGE_FAILURE, GET_SPECIFIC_IMAGE_REQUEST, GET_SPECIFIC_IMAGE_SUCCESS, SET_SEARCH } from "./imageTypes"
 
 
 export const getImageRequest = () => {
@@ -44,6 +44,16 @@ export const getSpecificImageFailure = (err) => {
         type: GET_SPECIFIC_IMAGE_FAILURE,
         payload: err.message
     }
+}
+
+
+export const setSearch = (val) => {
+    console.log("called set search", val)
+    return {
+        type: SET_SEARCH,
+        payload: val
+    }
+
 }
 
 

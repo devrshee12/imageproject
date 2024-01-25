@@ -10,30 +10,41 @@ import { Provider } from 'react-redux';
 import store from './features/store';
 import ImageDesc from './components/ImageDesc';
 import History from './components/History';
+import ErrorBoundary from './components/ErrorBoundary';
+import NavBar from './components/NavBar';
+import Home from './components/Home';
 
 
 const appRouter = createBrowserRouter([
   {
-    path:"/",
-    element: <App/>
+    path:"/navbar",
+    element: <ErrorBoundary><NavBar/></ErrorBoundary>
   },
   {
+    path:"/",
+    element: <ErrorBoundary><App/></ErrorBoundary>
+  },
+  // {
+  //   path:"/",
+  //   element: <ErrorBoundary><Home/></ErrorBoundary>
+  // },
+  {
     path:"/image/:imageId",
-    element: <ImageDesc/> 
+    element: <ErrorBoundary><ImageDesc/> </ErrorBoundary>
   },
   {
     path:"/history",
-    element:<History/>
+    element:<ErrorBoundary><History/></ErrorBoundary> 
   }
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  // <ErrorBoundary>
   <Provider store={store}>
-
     <RouterProvider router={appRouter}/>
-
   </Provider>
+  // </ErrorBoundary>
 );
 
 // If you want to start measuring performance in your app, pass a function
