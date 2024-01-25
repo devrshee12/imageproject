@@ -9,3 +9,6 @@ export const GET_SPECIFIC_IMAGE_FAILURE = "GET_SPECIFIC_IMAGE_FAILURE"
 
 
 export const SET_SEARCH = "SET_SEARCH"
+
+
+export const ADD_IMAGES = "ADD_IMAGES"

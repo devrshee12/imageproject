@@ -1,5 +1,5 @@
 import axios from "axios"
-import { GET_IMAGE_FAILURE, GET_IMAGE_REQUEST, GET_IMAGE_SUCCESS, GET_SPECIFIC_IMAGE_FAILURE, GET_SPECIFIC_IMAGE_REQUEST, GET_SPECIFIC_IMAGE_SUCCESS, SET_SEARCH } from "./imageTypes"
+import { ADD_IMAGES, GET_IMAGE_FAILURE, GET_IMAGE_REQUEST, GET_IMAGE_SUCCESS, GET_SPECIFIC_IMAGE_FAILURE, GET_SPECIFIC_IMAGE_REQUEST, GET_SPECIFIC_IMAGE_SUCCESS, SET_SEARCH } from "./imageTypes"
 
 
 export const getImageRequest = () => {
@@ -57,6 +57,14 @@ export const setSearch = (val) => {
 }
 
 
+export const addImages = (images) => {
+    return {
+        type: ADD_IMAGES,
+        payload: images
+    }
+}
+
+
 
 export const getImages = (search="dog", page=1, per_page=18) => {
     return async(dispatch) => {
@@ -105,4 +113,34 @@ export const apiSpecificImage = (id) => {
 
     }
     
+}
+
+
+export const getMoreImages = (search="dog", page=1, per_page=18) => {
+    return async(dispatch) => {
+        try{
+            dispatch(getImageRequest());
+            let newSearch = search;
+            if(newSearch === ""){
+                newSearch = "dog"
+            }
+            console.log("newSearch : ", newSearch);
+            console.log("here in get more images ");
+            const res = await axios.get(`${process.env.REACT_APP_PEXEL_API}/search?query=${newSearch}&page=${page}&per_page=${per_page}&orientation=square`, {
+                headers: {
+                    Authorization: `${process.env.REACT_APP_PEXEL_API_KEY}`
+                }
+            });
+            dispatch(addImages(res?.data));
+
+            console.log("here in add images ", res?.data)
+
+        }
+        catch(err){
+            dispatch(getImageFailure(err));
+            console.log(err)
+        }
+    }
+
+
 }

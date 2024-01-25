@@ -1,4 +1,4 @@
-import { GET_IMAGE_FAILURE, GET_IMAGE_REQUEST, GET_IMAGE_SUCCESS, GET_SPECIFIC_IMAGE_FAILURE, GET_SPECIFIC_IMAGE_REQUEST, GET_SPECIFIC_IMAGE_SUCCESS, SET_SEARCH } from "./imageTypes"
+import { ADD_IMAGES, GET_IMAGE_FAILURE, GET_IMAGE_REQUEST, GET_IMAGE_SUCCESS, GET_SPECIFIC_IMAGE_FAILURE, GET_SPECIFIC_IMAGE_REQUEST, GET_SPECIFIC_IMAGE_SUCCESS, SET_SEARCH } from "./imageTypes"
 
 
 const initalState = {
@@ -80,6 +80,16 @@ const imageReducer = (state = initalState, action) => {
             return {
                 ...state,
                 search: action.payload
+            }
+
+        case ADD_IMAGES:
+            const gotImages = action.payload.photos
+            const currImages = state.images
+            return {
+                ...state, 
+                gettingImages: false,
+                getImageFailure: null,
+                images: [...currImages, ...gotImages]
             }
         default:
             return state
