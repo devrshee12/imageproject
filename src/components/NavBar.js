@@ -38,7 +38,7 @@ const NavBar = () => {
     
     }}><FaSearch /></button>
   </form>
-  <button type="button" class="btn btn-outline-info" style={{marginRight:"20px"}} onClick={handleDownloadClick}>Download</button>
+  <button type="button" class="btn btn-outline-info" style={{marginRight:"20px"}} onClick={handleDownloadClick}>Downloads</button>
 </nav>
   )
 }

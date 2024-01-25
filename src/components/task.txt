@@ -10,3 +10,6 @@ download -> optiopns
 next project 
 javascript 
 
+REACT_APP_PEXEL_API_KEY = FUPcTuaTH46vN9gdotQ6HjIteDQqye6rjAUbj5gCpA7TB307AEjbWK1t
+REACT_APP_PEXEL_API = https://api.pexels.com/v1
+

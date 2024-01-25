@@ -71,6 +71,7 @@ const History = () => {
             }
         </div>
             }
+            <button type="button" className="btn btn-outline-dark" onClick={() => {navigate("/")}}>Go Back to Home page</button>
     </>
 
   )

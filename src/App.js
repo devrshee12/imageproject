@@ -20,6 +20,7 @@ function App() {
   }, [])
 
   useEffect(() => {
+    console.log("called when search value is : ", search);
     if(search !== ""){
       dispatch(getImages(search))
     }

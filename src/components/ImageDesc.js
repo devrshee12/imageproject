@@ -12,13 +12,26 @@ import { Dropdown, DropdownButton } from 'react-bootstrap'
 
 const ImageDesc = () => {
     const {imageId} = useParams()
-    const {gettingSpecificImage, specificImage, getSpecificImageFailure} = useSelector((state) => state.image)
+    const [pImage, setPImage] = useState(null);
+    const {gettingSpecificImage, specificImage, getSpecificImageFailure, images} = useSelector((state) => state.image)
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [size, setSize] = useState("small")
     useEffect(() => {
+        // console.log("here in imageid : ", imageId);
         dispatch(apiSpecificImage(imageId))
+        // console.log("here in image desc images are : " , images);
+        // const gotImage = images.filter((image) => {
+        //     return parseInt(imageId) === image.id;   
+        // }) 
+        // console.log("got image : ", gotImage);
+
+        // setPImage(gotImage[0]);
+
     }, [])
+    // useEffect(() => { // doubt
+
+    // }, [navigate])
 
     const handleDownload = (image) => {
         const gotHistory = localStorage.getItem("history");
@@ -28,7 +41,7 @@ const ImageDesc = () => {
         else{
             const realHistory = JSON.parse(gotHistory);
             if(realHistory.some((i) => i.url === image?.src?.original) === false){
-                localStorage.setItem("history", JSON.stringify([...realHistory, {url:image?.src?.original, alt: image?.alt, downloadDate: Date.now()}]))
+                localStorage.setItem("history", JSON.stringify([...realHistory, {id:image.id, url:image?.src?.original, alt: image?.alt, downloadDate: Date.now()}]))
 
             }
         }
@@ -59,6 +72,9 @@ const ImageDesc = () => {
 
         </div> : <div style={{height:"100vh", width: "100vw"}}>Loading...</div>
     } */}
+
+    {
+        (parseInt(imageId) !== specificImage?.id) ?  <div>Loading...</div> : 
         
 
         <div class="card mb-3" style={{width:"100vw", height:"95vh", display:"flex", justifyContent:"center", alignItems:"center"}}>
@@ -76,6 +92,7 @@ const ImageDesc = () => {
                 <button type="button" class="btn btn-outline-info" onClick={() => {handleDownload(specificImage)}}>Download</button></p>
             </div>
         </div>
+    }
     
     </>
 
